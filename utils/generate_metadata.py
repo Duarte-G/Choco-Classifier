@@ -8,9 +8,11 @@ OUTPUT_FILE = '../metadata/metadata.csv'
 def parse_filename(filename):
     base = os.path.basename(filename)
     name, _ = os.path.splitext(base)
-    parts = name.split('_')
-    class_id, seq, angle, background = parts
-    return int(class_id), seq, angle, background
+    parts = name.split('-')
+    if len(parts) != 4:
+        raise ValueError(f"Formato inesperado: {name}")
+    class_id, seq, view, background = parts
+    return int(class_id), seq, view, background
 
 def generate_metadata():
     data = []
