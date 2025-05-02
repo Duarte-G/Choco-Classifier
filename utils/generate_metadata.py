@@ -1,8 +1,8 @@
 import os
 import pandas as pd
 
-DATASET_DIR = 'dataset'
-OUTPUT_FILE = 'metadata/metadata.csv'
+DATASET_DIR = '../dataset'
+OUTPUT_FILE = '../metadata/metadata.csv'
 
 # Extração de metadados
 def parse_filename(filename):

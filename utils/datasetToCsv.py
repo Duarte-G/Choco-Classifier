@@ -37,8 +37,8 @@ for label in sorted(os.listdir(pasta_entrada)):
                     # Carregar a imagem e converter para escala de cinza
                     imagem = Image.open(caminho_completo).convert('L')  # 'L' para escala de cinza
                     
-                    # Converter imagem para array numpy e normalizar (0-1)
-                    imagem_array = np.array(imagem).flatten() / 255.0
+                    # Converter imagem para array numpy e normalizar (0-255)
+                    imagem_array = np.array(imagem).flatten()
                     
                     # Adicionar à lista de dados com o rótulo
                     dados.append((label_int, imagem_array))
@@ -52,9 +52,9 @@ print(f"Total de imagens coletadas: {len(dados)}")
 labels = [item[0] for item in dados]
 features = [item[1] for item in dados]
 
-# Dividir os dados em conjuntos de treinamento, teste e validação (80%, 10%, 10%)
-X_temp, X_test, y_temp, y_test = train_test_split(features, labels, test_size=0.1, random_state=42, stratify=labels)
-X_train, X_val, y_train, y_val = train_test_split(X_temp, y_temp, test_size=0.11111, random_state=42, stratify=y_temp)  # 0.1/(0.9) ≈ 0.11111
+# Dividir os dados em conjuntos de treinamento, teste e validação
+X_temp, X_test, y_temp, y_test = train_test_split(features, labels, test_size=0.2, random_state=42, stratify=labels)    # TEST SIZE TALVEZ MEIO ALTO
+X_train, X_val, y_train, y_val = train_test_split(X_temp, y_temp, test_size=0.25, random_state=42, stratify=y_temp)     # TEST SIZE TALVEZ MEIO ALTO
 
 # Função para salvar os dados em CSV
 def salvar_csv(X, y, nome_arquivo):
