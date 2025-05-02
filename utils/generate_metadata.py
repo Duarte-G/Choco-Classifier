@@ -1,12 +1,12 @@
 import os
 import pandas as pd
 
-DATASET_DIR = '../dataset'
+DATASET_DIR = '../dataset_processado'
 OUTPUT_FILE = '../metadata/metadata.csv'
 
 # Extração de metadados
 def parse_filename(filename):
-    base = os.path.basemname(filename)
+    base = os.path.basename(filename)
     name, _ = os.path.splitext(base)
     parts = name.split('_')
     class_id, seq, angle, background = parts
