@@ -18,8 +18,8 @@ with open(saida_csv, "w", newline="", encoding="utf-8") as csvfile:
                 continue
             # exemplo: 00-01-V1-B.png
             parts = fname.split("-")               # parts = ["00", "01", "V1", "B.png"]
-            class_id = parts[0]
-            image_id = parts[1]
+            class_id = parts[0]                    # "00"
+            image_id = parts[1]                    # "01"
             angle = parts[2]                       # "V1"
             bg_color = parts[3].split(".")[0]      # "B"
             # caminho relativo dentro do root
