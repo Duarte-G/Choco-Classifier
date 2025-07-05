@@ -3,9 +3,9 @@ from PIL import Image
 import json
 
 # Variaveis
-pasta_entrada = "../dataset"     
-pasta_saida = "../dataset_processado"     
-image_size = (86, 86)                   # Tamanho das imagens final
+pasta_entrada = "dataset_aug"     
+pasta_saida = "dataset_processado"     
+image_size = (224, 224)                   # Tamanho das imagens final
 center_crop = 1                         # 0 = comprime a imagem, 1 = prioriza o centro da imagem
 
 # Criar diretório de saída se não existir

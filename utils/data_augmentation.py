@@ -1,6 +1,7 @@
 import numpy as np
 np.bool = bool
 
+import random
 import cv2
 from pathlib import Path
 import imgaug.augmenters as iaa
@@ -42,17 +43,17 @@ augmenter = iaa.Sequential([
     iaa.Sometimes(
         0.7,
         iaa.Convolve(matrix=mean_kernel, name="MeanFilter")
-    ),
-    # 4) Flip horizontal ou vertical
-    iaa.Sometimes(
-        0.7,
-        iaa.OneOf([iaa.Fliplr(1.0), iaa.Flipud(1.0)]), name="Flip"
-    ),
-    # 5) Rotação aleatória
-    iaa.Sometimes(
-        0.7,
-        iaa.Affine(rotate=(-45, 45)), name="RandomRotate"
     )
+    # 4) Flip horizontal ou vertical (RESOLVIDO POSTERIORMENTE PRA FACILITAR SEGMENTACAO)
+    # iaa.Sometimes(
+    #     0.7,
+    #     iaa.OneOf([iaa.Fliplr(1.0), iaa.Flipud(1.0)]), name="Flip"
+    # ),
+    # 5) Rotação aleatória (PROBLEMAS NA HORA DA SEGMENTACAO)
+    # iaa.Sometimes(
+    #     0.7,
+    #     iaa.Affine(rotate=(-45, 45)), name="RandomRotate"
+    # )
 ], random_order=True)
 
 # Parâmetros
@@ -85,7 +86,18 @@ for classe in sorted(pasta_entrada.iterdir()):
         img = cv2.imread(str(fname))
         for i in range(1, n_augs + 1):
             aug = augmenter(image=img)
-            novo_nome = f"{fname.stem}_aug{i}{fname.suffix}"
+
+            # decide manualmente flip com probabilidade 0.7
+            flip_tag = ""
+            if random.random() < 0.7:
+                if random.random() < 0.5:
+                    aug = cv2.flip(aug, 1)
+                    flip_tag = "_flipH"
+                else:
+                    aug = cv2.flip(aug, 0)
+                    flip_tag = "_flipV"
+
+            novo_nome = f"{fname.stem}_aug{i}{flip_tag}{fname.suffix}"
             cv2.imwrite(str(pasta_classe_out / novo_nome), aug)
 
 print(f"Processamento concluído em: {pasta_saida.resolve()}")
