@@ -38,4 +38,4 @@ O modelo final apresenta uma boa detecção quando utilizado em cenários contro
 
 O classificador baseado em CNN aprende diretamente das imagens segmentadas de cada bombom, sem necessidade de extração manual de características. A arquitetura tem três blocos convolucionais (filtros 3×3, ReLU, pooling e dropout) e duas camadas densas no final. O conjunto foi dividido em 80% treino, 10% validação e 10% teste, o modelo foi treinado com o otimizador Adam (learning rate 1×10⁻⁴), função de perda sparse_categorical_crossentropy e monitorado com EarlyStopping e redução de learning rate.
 
-O modelo final apresenta uma boa capacidade de detecção dos bombons, superando por pouco o classificador clássico em alguns casos, o F1‑Score resultante foi 0.8.
+O modelo final apresenta uma boa capacidade de detecção dos bombons, superando por pouco o classificador clássico em alguns casos, o F1‑Score resultante foi 0.84.
