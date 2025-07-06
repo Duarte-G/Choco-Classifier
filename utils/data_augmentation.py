@@ -43,7 +43,51 @@ augmenter = iaa.Sequential([
     iaa.Sometimes(
         0.7,
         iaa.Convolve(matrix=mean_kernel, name="MeanFilter")
-    )
+    ),
+    # 1) 
+    iaa.Sometimes(
+        0.2, 
+        iaa.Lambda(
+            func_images=lambda imgs, random_state, parents, hooks: [
+                np.clip(
+                    (np.log1p(img.astype(np.float32)/255.0 * 5) / np.log1p(5.0) * 255.0),
+                    0, 255
+                ).astype(np.uint8)
+                for img in imgs
+            ],
+            name="StrongLogTransform"
+        )
+    ),
+    # 2) Exp-transform reforçado (fator 5×)
+    iaa.Sometimes(
+        0.2,
+        iaa.Lambda(
+            func_images=lambda imgs, random_state, parents, hooks: [
+                np.clip(
+                    (np.expm1(img.astype(np.float32)/255.0 * 2) / np.expm1(2.0) * 255.0),
+                    0, 255
+                ).astype(np.uint8)
+                for img in imgs
+            ],
+            name="StrongExpTransform"
+        )
+    ),
+
+    # 3) Filtro da média 5×5 aplicado duas vezes
+    iaa.Sometimes(
+        0.2,
+        iaa.SomeOf((2, 2), [  # força a aplicação de 2 cópias
+            iaa.Convolve(matrix=np.ones((5,5), dtype=np.float32)/25),
+            iaa.Convolve(matrix=np.ones((5,5), dtype=np.float32)/25),
+        ]),
+        name="StrongMeanFilter"
+    ),
+    # 2) Filtros extras (50% de chance cada)
+    iaa.Sometimes(0.5, iaa.GaussianBlur(sigma=(0.5, 1.5)),      name="GaussianBlur"),
+    iaa.Sometimes(0.5, iaa.MotionBlur(k=(5, 15)),             name="MotionBlur"),
+    iaa.Sometimes(0.5, iaa.AdditiveGaussianNoise(scale=(5, 20)), name="AddGaussianNoise"),
+    iaa.Sometimes(0.5, iaa.LinearContrast((0.5, 2.0)),         name="ContrastAdjust"),
+    iaa.Sometimes(0.5, iaa.Add((-30, 30), per_channel=0.5),    name="BrightnessShift"),
     # 4) Flip horizontal ou vertical (RESOLVIDO POSTERIORMENTE PRA FACILITAR SEGMENTACAO)
     # iaa.Sometimes(
     #     0.7,
@@ -57,7 +101,7 @@ augmenter = iaa.Sequential([
 ], random_order=True)
 
 # Parâmetros
-n_augs = 3
+n_augs = 6
 
 # Cria estrutura de saída
 pasta_saida.mkdir(exist_ok=True)
