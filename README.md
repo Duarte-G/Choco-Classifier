@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="https://github.com/user-attachments/assets/49bbf074-215a-470b-b81f-4078f2506894" alt="Capa" width="600" />
-</p>
+
 
 # Classificador de Bombons
 
